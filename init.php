@@ -2,6 +2,7 @@
 
 // set up the globals
 require(dirname(__FILE__).'/lib/Bozuko/Api.php');
+$config = include(dirname(__FILE__).'/config.php');
 $api = new Bozuko_Api();
 
 // globals for examples
@@ -13,10 +14,9 @@ $styles = array();
 /**
  * Mark's Playground
  */
-
-$api->setServer('https://playground.bozuko.com:8001');
-$api->setApiKey('MSqJ31pCgiwuMslSLSk9uxBkGc0kOd4v');
-$api->setApiSecret('ULmUdpCUivvmOUAlUzxfCFWaGUl0iwec');
+$api->setServer($config['server']);
+$api->setApiKey($config['key']);
+$api->setApiSecret($config['secret']);
 
 /**
  * Chinoki Playground
