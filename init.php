@@ -10,19 +10,6 @@ $scripts = array();
 $styles = array();
 
 // configure
-
-/**
- * Mark's Playground
- */
 $api->setServer($config['server']);
 $api->setApiKey($config['key']);
 $api->setApiSecret($config['secret']);
-
-/**
- * Chinoki Playground
- */
-/*
-$api->setServer('https://chinoki.bozuko.com');
-$api->setApiKey('CxRi8sOZqwTaq0TtKHaS6LKqNIRIfDow');
-$api->setApiSecret('sMZuUUudDlnyrOBZJgZTvsJQxavBTSNs');
-*/
