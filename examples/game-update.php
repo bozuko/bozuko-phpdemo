@@ -25,7 +25,7 @@ try{
     
     if( !$id ){
         // display list of pages
-        list_games('Edit', '?id=%s');
+        list_games('edit_button');
         include(dirname(__FILE__).'/inc/footer.php');
         exit;
     }
@@ -286,3 +286,21 @@ try{
 }
 
 include(dirname(__FILE__).'/inc/footer.php');
+
+
+function edit_button( $game )
+{
+    if( $game->status == 'draft' ){
+        ?>
+    <form action="?" method="GET" style="margin:0">
+        <input type="hidden" name="id" value="<?= $game->id ?>" />
+        <button type="submit" class="btn btn-mini">Edit</button>
+    </form>
+        <?php
+    }
+    else {
+        ?>
+        N/A
+        <?
+    }
+}

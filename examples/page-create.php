@@ -10,7 +10,7 @@ try{
     $success = false;
     $result;
     if( $_SERVER['REQUEST_METHOD'] == 'POST' ){
-        $result = $api->call('/page', 'PUT', $_POST);
+        $result = $api->call('/page', 'PUT', intuit_types($_POST) );
         if( !$result->success ){
             $errors = $result->errors;
             $error = $result->error;

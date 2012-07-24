@@ -72,6 +72,16 @@ $examples = array(
             <a href="https://playground.bozuko.com:8001/docs/api/#/links/game_publish" target="bozuko_docs">game_publish link</a>
             </p>
         '
+    ),
+    array(
+        'title'         => 'Cancel Game',
+        'file'          => 'game-cancel',
+        'description'   => '
+            <p>Cancel a game.</p>
+            <p>See the docs for the 
+            <a href="https://playground.bozuko.com:8001/docs/api/#/links/game_cancel" target="bozuko_docs">game_cancel link</a>
+            </p>
+        '
     )
 )
 

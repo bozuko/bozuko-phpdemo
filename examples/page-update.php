@@ -30,7 +30,7 @@ try{
     }
     
     if( $_SERVER['REQUEST_METHOD'] == 'POST' ){
-        $result = $api->call('/page/', 'POST', $_POST);
+        $result = $api->call('/page/', 'POST', intuit_types($_POST));
         if( !$result->success ){
             $errors = $result->errors;
             $error = $result->error;
@@ -142,7 +142,7 @@ try{
         <? endforeach; ?>
         
         <div class="form-actions">
-            <button type="submit" class="btn btn-primary">Create Page</button>
+            <button type="submit" class="btn btn-primary">Update Page</button>
         </div>
     </form>
     <?php

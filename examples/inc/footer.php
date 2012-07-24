@@ -6,6 +6,7 @@
             foreach($api->getHistory() as $request){
                 $e = array(
                     'path' => $request->getPath(),
+                    'method' => $request->getMethod(),
                     'params' => $request->getParams(),
                     'response_data' => $request->getResponse()->getData()
                 );

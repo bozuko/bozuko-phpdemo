@@ -19,7 +19,7 @@ try{
         ?>
         <ul>
             <? foreach( $pages->pages as $page ){ ?>
-            <li><img src="<?= $page->image ?>" alt="" /> <?= $page->name ?>
+            <li style="margin-bottom: 10px;"><img style="max-height: 30px;" src="<?= $page->image ?>" alt="" /> <?= $page->name ?>
             <? } ?>
         </ul>
         <?php
