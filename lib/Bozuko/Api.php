@@ -20,6 +20,11 @@ class Bozuko_Api {
         $this->setServer( $server );
     }
     
+    public function getHistory()
+    {
+        return $this->history;
+    }
+    
     public function setServer( $server )
     {
         $this->server = $server;

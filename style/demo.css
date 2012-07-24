@@ -10,3 +10,6 @@ textarea.tall { height: 300px; }
 
 #prize_0 .form-actions { display: none; }
 .prize-well .form-actions { background: transparent; border-width: 0; margin-bottom: 0; }
+
+.api-log{ margin: 20px 0; display: none; }
+.api-log pre { font-size: 10px; }

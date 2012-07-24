@@ -62,6 +62,16 @@ $examples = array(
             for more details.
             </p>
         '
+    ),
+    array(
+        'title'         => 'Publish Game',
+        'file'          => 'game-publish',
+        'description'   => '
+            <p>Publish a game.</p>
+            <p>See the docs for the 
+            <a href="https://playground.bozuko.com:8001/docs/api/#/links/game_publish" target="bozuko_docs">game_publish link</a>
+            </p>
+        '
     )
 )
 

@@ -1,5 +1,6 @@
 <?php
 require_once(dirname(__FILE__).'/../init.php');
+require_once(dirname(__FILE__).'/inc/helpers.php');
 
 // add css and scripts
 global $scripts, $styles;
@@ -185,7 +186,7 @@ try{
             'label'             => 'Value'
         ),
         array(
-            'name'              => 'quantity',
+            'name'              => 'total',
             'label'             => 'Quantity'
         ),
         array(
@@ -284,119 +285,3 @@ try{
 }
 
 include(dirname(__FILE__).'/inc/footer.php');
-
-function intuit_types($ar)
-{
-    $n = array();
-    foreach( $ar as $k => $v){
-        // echo( "$k: ".gettype($v)."<br />");
-        if( is_array( $v ) ){
-            $n[$k] = intuit_types( $v );
-        }
-        else if( is_string( $v ) ){
-            if( preg_match('/^true|false$/', $v ) ){
-                $n[$k] = (bool) $v;
-            }
-            else if( preg_match('/^(\d+|\d?\.\d+)$/', $v) ) {
-                $n[$k] = (float) $v;
-            }
-            else if( !$v ){
-                // don't set it
-            }
-            else {
-                $n[$k] = $v;
-            }
-        }
-        else {
-            $n[$k] = $v;
-        }
-    }
-    return $n;
-}
-
-
-function renderFields($fields)
-{
-    foreach( $fields as $i => $field ){
-        $classes = array('control-group');
-        if( $field['error'] ) $classes[] = 'error';
-        ?>
-    <div class="<?= implode(' ',$classes) ?>" >
-        <label class="control-label" for="<?= $field['name'] ?>"><?= $field['label'] ?></label>
-        <?php
-        $type = @$field['type'];
-        switch( $type ){
-            
-            case 'select':
-                ?>
-        <div class="controls">
-            <select
-                class="span3"
-                name="<?= $field['name'] ?>"
-                id="<?= $field['name'] ?>"
-            >
-            <?
-            foreach((array) @$field['options'] as $value => $text ){
-                $selected = $field['value'] === $value; 
-                ?>
-                <option
-                    <?= $selected ? 'selected' : '' ?>
-                    value="<?= htmlspecialchars($value, ENT_QUOTES, 'utf-8') ?>"
-                ><?= $text ?></option>
-                <?php
-            }
-            ?>
-            </select>
-            <? if( ($e=$field['error']) ){ ?>
-            <span class="help-inline"><?= $e ?></span>
-            <? } ?>
-        </div>        
-                <?php
-                break;
-            
-            case 'textarea':
-                ?>
-        <div class="controls">
-            <textarea
-                class="span6<?= @$field['tall'] ? ' tall' : '' ?>"
-                type="text"
-                name="<?= $field['name'] ?>"
-                id="<?= $field['name'] ?>""
-            ><?= @$field['value'] ?></textarea>
-            <? if( ($e=$field['error']) ){ ?>
-            <span class="help-inline"><?= $e ?></span>
-            <? } ?>
-        </div>
-                <?php
-                break;
-            
-            case 'text':
-            case 'date':
-            default:
-                $classes = array('span3');
-                if( $type == 'date' ) $classes[] = 'datetime';
-                ?>
-        <div class="controls">
-            <input
-                class="<?= implode(' ',$classes) ?>"
-                type="text"
-                name="<?= $field['name'] ?>"
-                id="<?= $field['name'] ?>"
-                <? if( ($v=@$field['value']) ) { ?>
-                value="<?= htmlspecialchars($v, ENT_QUOTES, 'UTF-8') ?>"
-                <? } ?>
-            />
-            <? if( ($e=$field['error']) ){ ?>
-            <span class="help-inline"><?= $e ?></span>
-            <? } ?>
-        </div>
-        <?php
-                break;
-        }
-        ?>
-    </div>
-    <?
-    } 
-}
-
-

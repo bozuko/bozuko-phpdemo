@@ -40,7 +40,7 @@ class Bozuko_Api_Request
             if( method_exists( $this, $setMethod ) ){
                 return call_user_func_array( array(&$this, $setMethod), $arguments );
             }
-            if( $name == $setMethod ){
+            if( $name == $getMethod ){
                 return $this->$v;
             }
             
