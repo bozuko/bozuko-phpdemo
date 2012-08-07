@@ -14,7 +14,7 @@ function list_games($link_text, $link_href=null)
                 'info',
                 false
             );
-            require_once(dirname(__FILE__).'/inc/footer.php');
+            include(dirname(__FILE__).'/footer.php');
             exit;
         }
         ?>
