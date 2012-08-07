@@ -3,13 +3,14 @@ require_once(dirname(__FILE__).'/../init.php');
 require_once(dirname(__FILE__).'/inc/helpers.php');
 
 // add css and scripts
-global $scripts, $styles;
+global $scripts, $styles, $config;
 $styles[] = 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.19/themes/cupertino/jquery-ui.css';
 $styles[] = 'https://raw.github.com/trentrichardson/jQuery-Timepicker-Addon/master/jquery-ui-timepicker-addon.css';
 
 $scripts[] = 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.19/jquery-ui.min.js';
 $scripts[] = 'https://raw.github.com/trentrichardson/jQuery-Timepicker-Addon/master/jquery-ui-timepicker-addon.js';
 $scripts[] = '../scripts/game.js';
+$scripts[] = $config['server'].'/js/widgets/themechooser.js';
 
 require_once(dirname(__FILE__).'/inc/header.php');
 
@@ -25,11 +26,12 @@ try{
         'limit'     => 50
     ));
     if( !$pages_result->count ){
-        ?>
-        <div class="alert alert-info">
-        <h4>There are no pages! Create one with the <strong>Create Page</strong> example.
-        </div>
-        <?php
+        alert_box(
+            'There are no pages',
+            '<p>Create one with the Create Page example</p>',
+            'info',
+            false
+        );
         require_once(dirname(__FILE__).'/inc/footer.php');
         exit;
     }
@@ -42,6 +44,10 @@ try{
     
     if( $_SERVER['REQUEST_METHOD'] == 'POST' ){
         $post = intuit_types( $_POST );
+        // if consolation prizes is disabled, remove it
+        if( !@$post['consolation_enabled'] ){
+            $post['consolation_prizes'] = array();
+        }
         $result = $api->call('/game', 'PUT', $post );
         if( !$result->success ){
             $errors = $result->errors;
@@ -53,14 +59,15 @@ try{
     }
     
     if( $result && $result->success ){
+        alert_box(
+            'Sweet Dice!',
+            '<p>The game was created successfully</p>',
+            'success',
+            false
+        );
         ?>
-        <div class="alert alert-block alert-success">
-            <h4>Game Created</h4>
-            <p>The game was created successfully.</p>
-        </div>
-        
-        <pre><? print_r( $result->game ) ?></pre><?
-        
+        <pre><? print_r( $result->game ) ?></pre>
+        <?
         include(dirname(__FILE__).'/inc/footer.php');
         exit;
     }
@@ -94,9 +101,7 @@ try{
         ),
         array(
             'name'              => 'theme',
-            'label'             => 'Theme',
-            'type'              => 'select',
-            'options'           => array('default' => 'Default')
+            'label'             => 'Theme'
         ),
         array(
             'name'              => 'entry_duration',
@@ -125,16 +130,6 @@ try{
                 'facebook/likecheckin'  => 'Facebook Like + Checkin',
                 'facebook/checkin'      => 'Facebook Checkin',
                 'bozuko/nothing'        => 'No Requirement'
-            )
-        ),
-        array(
-            'name'              => 'entry_plays',
-            'label'             => 'Entry Plays',
-            'type'              => 'select',
-            'options'           => array(
-                1                   => '1',
-                2                   => '2',
-                3                   => '3'
             )
         ),
         array(
@@ -206,6 +201,7 @@ try{
     );
     
     $prize_values = $game ? $game->prizes : @$_POST['prizes'];
+    $consolation_prize_values = $game ? $game->consolation_prizes : @$_POST['consolation_prizes'];
     /* ?><pre><? print_r( $prize_values ) ?></pre><?php */
     if( !is_array( $prize_values ) || !count($prize_values) ) {
         $prize_values = array(array());
@@ -227,6 +223,30 @@ try{
             $fields[$i]['ref'] = $n;
         }
         $prizes[] = $fields;
+    }
+    
+    $consolation_prizes = array();
+    $consolation_enabled = true;
+    if( @$_POST['consolation_enabled'] === 'false' || !is_array( $consolation_prize_values ) || !count($consolation_prize_values) ) {
+        $consolation_enabled = false;
+        $consolation_prize_values = array(array());
+    }
+    if( is_array( $consolation_prize_values ) ) foreach($consolation_prize_values as $cur => $values){
+        $values = (array)$values;
+        // copy fields
+        $fields = $prize_fields;
+        foreach( $fields as $i => $field ){
+            $n = $field['name'];
+            if(($v = @$values[$n]) ) $fields[$i]['value'] = $v;
+            // check for errors
+            if( $errors && @$errors->consolation_prizes && @$errors->consolation_prizes[$cur] && ($e = @$errors->consolation_prizes[$cur]->$n) ){
+                $fields[$i]['error'] = $e;
+            }
+            // fix the name
+            $fields[$i]['name'] = "consolation_prizes[$cur][$n]";
+            $fields[$i]['ref'] = $n;
+        }
+        $consolation_prizes[] = $fields;
     }
     
     ?>
@@ -258,30 +278,51 @@ try{
                 </div>
                 <? } ?>
             </div>
+            
+            <div style="padding-top: 20px;">
+            <?php
+            renderFields(array(array(
+                'type' => 'select',
+                'name' => 'consolation_enabled',
+                'options' => array(
+                    'true'  => 'Enabled',
+                    'false' => 'Disabled'
+                ),
+                'label' => 'Consolation Prize',
+                'value' => $consolation_enabled ? 'true' : 'false'
+            )));
+            ?>
+                <div class="consolation-prize<?= $consolation_enabled ? '' : ' hide' ?>">
+                    <? renderFields( $consolation_prizes[0] ) ?>
+                </div>
+            </div>
         </div>
+        
+        
         <div class="form-actions">
             <button type="submit" class="btn btn-primary">Create Game</button>
         </div>
     </form>
     <?php
     
-}catch(Bozuko_Api_Exception $e){
+}
+catch( Bozuko_Api_Exeption $e){
     // handle api error
-    ?>
-    <div class="alert alert-error">
-        <h4>An API error occured</h4>
-        <pre><?= htmlentities( print_r($e, 1)) ?></pre>
-    </div>
-    <?
-    
-}catch(Exception $e){
+    alert_box(
+        'An API Error occurred',
+        '<pre>'.htmlentities( print_r($e, 1)).'</pre>',
+        'error',
+        true
+    );
+}
+catch( Exception $e ){
     // handle any other errors
-    ?>
-    <div class="alert alert-error">
-        <h4>An error occured</h4>
-        <pre><?= htmlentities( print_r($e, 1)) ?></pre>
-    </div>
-    <?
+    alert_box(
+        'An Error occurred',
+        '<pre>'.htmlentities( print_r($e, 1)).'</pre>',
+        'error',
+        true
+    );
 }
 
 include(dirname(__FILE__).'/inc/footer.php');

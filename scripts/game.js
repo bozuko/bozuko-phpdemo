@@ -47,6 +47,16 @@ jQuery(function($){
         
     });
     
+    $('[name=consolation_enabled]').change(function(){
+        var enabled = $(this).find('option:selected').val();
+        $('.consolation-prize')[enabled==='true'?'removeClass':'addClass']('hide');
+    });
+    
+    
+    jQuery(function(){
+        $('[name=theme]').bozukothemechooser({server:BOZUKO_SERVER, key:BOZUKO_KEY});
+    });
+    
     function updateTab(tab, i, empty){
         tab.find('.control-group').each(function(){
             var l = $(this).find('label')

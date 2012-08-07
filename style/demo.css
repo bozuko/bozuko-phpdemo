@@ -15,3 +15,6 @@ textarea.tall { height: 300px; }
 
 .api-log{ margin: 20px 0; display: none; }
 .api-log pre { font-size: 11px; line-height: 1.3em; }
+
+.report-nav a { text-decoration: none; display: inline-block; padding: 2px 5px;}
+.report-nav a.active { border-radius: 4px; background: #f0f0f0; color: #000; }

@@ -59,9 +59,9 @@ class Bozuko_Api {
         return $this->last_response;
     }
     
-    public function call( $path, $method='GET', $params=array() )
+    public function call( $path, $method='GET', $params=array(), $options=array() )
     {
-        $this->history[] = $request = new Bozuko_Api_Request(array(
+        $this->history[] = $request = new Bozuko_Api_Request(array_merge(array(
             'server'        => $this->server,
             'token'         => $this->token,
             'apiKey'        => $this->api_key,
@@ -69,7 +69,7 @@ class Bozuko_Api {
             'path'          => $path,
             'method'        => $method,
             'params'        => $params
-        ));
+        ), $options));
         
         $this->last_response = $response = $request->run();
         

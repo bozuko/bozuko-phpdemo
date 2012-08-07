@@ -17,33 +17,16 @@ try{
         
         $game = $api->call('/game/'.$id);
         if( !@$game->links->game_cancel ){
-            ?>
-    <div class="alert alert-error alert-block">
-        <a class="close" data-dismiss="alert" href="#">&times;</a>
-        <p>Could not cancel - no publish link.</p>
-    </div>
-            <?php
+            alert_box('Error', '<p>No Cancel Link</p>', 'error', false);
         }
         
         else {
             $result = $api->call( $game->links->game_cancel, 'POST' );
             if( $result->success ){
-                ?>
-        <div class="alert alert-block alert-success">
-            <a class="close" data-dismiss="alert" href="#">&times;</a>
-            <h4>Sweet Dice!</h4>
-            <p>The game was cancelled.</p>
-        </div>
-                <?php
+                alert_box('Nice!', '<p>Gam has been cancelled</p>', 'success');
             }
             else {
-                ?>
-        <div class="alert alert-error alert-block">
-            <a class="close" data-dismiss="alert" href="#">&times;</a>
-            <h4>Error cancelling the game</h4>
-            <p><?= $result->error ?></p>
-        </div>
-                <?php
+                alert_box('Error', '<p>'.$result->error.'</p>');
             }
         }
     }
@@ -54,23 +37,24 @@ try{
     include(dirname(__FILE__).'/inc/footer.php');
     
     
-}catch(Bozuko_Api_Exception $e){
+}
+catch( Bozuko_Api_Exeption $e){
     // handle api error
-    ?>
-    <div class="alert alert-error">
-        <h4>An API error occured</h4>
-        <pre><?= htmlentities( print_r($e, 1)) ?></pre>
-    </div>
-    <?
-    
-}catch(Exception $e){
+    alert_box(
+        'An API Error occurred',
+        '<pre>'.htmlentities( print_r($e, 1)).'</pre>',
+        'error',
+        true
+    );
+}
+catch( Exception $e ){
     // handle any other errors
-    ?>
-    <div class="alert alert-error">
-        <h4>An error occured</h4>
-        <pre><?= htmlentities( print_r($e, 1)) ?></pre>
-    </div>
-    <?
+    alert_box(
+        'An Error occurred',
+        '<pre>'.htmlentities( print_r($e, 1)).'</pre>',
+        'error',
+        true
+    );
 }
 
 require_once(dirname(__FILE__).'/inc/footer.php');

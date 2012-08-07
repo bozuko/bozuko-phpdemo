@@ -1,3 +1,6 @@
+<?php
+global $config;
+?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -9,6 +12,8 @@
     
         <!-- Styles -->
         <link href="../bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <link href="../google-code-prettify/prettify.css" rel="stylesheet">
+        
             
         <?php
         global $styles;
@@ -26,6 +31,29 @@
         <!--[if lt IE 9]>
             <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
         <![endif]-->
+        
+        <!-- Javascript
+        ================================================== -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+        <script src="../bootstrap/js/bootstrap.min.js"></script>
+        <script src="../google-code-prettify/prettify.js"></script>
+        <?php
+        global $scripts;
+        foreach( $scripts as $script ){
+            ?>
+        <script src="<?= $script ?>"></script>
+            <?php
+        }
+        ?>
+        
+        <script src="../scripts/example.js"></script>
+        
+        <script type="text/javascript">
+        var BOZUKO_SERVER='<?= $config['server'] ?>'
+          , BOZUKO_KEY='<?= $config['key'] ?>'
+          ;
+        jQuery(prettyPrint);
+        </script>
 
     </head>
     <body class="example">

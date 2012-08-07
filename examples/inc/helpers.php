@@ -8,11 +8,12 @@ function list_games($link_text, $link_href=null)
             'limit'     => 50
         ));
         if( !$pages_result->count ){
-            ?>
-            <div class="alert alert-info">
-            <h4>There are no pages! Create one with the <strong>Create Page</strong> example.
-            </div>
-            <?php
+            alert_box(
+                'There are no pages',
+                '<p>Create one with the Create Page example</p>',
+                'info',
+                false
+            );
             require_once(dirname(__FILE__).'/inc/footer.php');
             exit;
         }
@@ -35,7 +36,7 @@ function list_games($link_text, $link_href=null)
             if( $games->count ) foreach( $games->games as $game ) {
                 ?>
                 <tr>
-                    <td><?= $game->name ?></td>
+                    <td><a href="<?= $game->url ?>" target="_blank"><?= $game->name ?></a></td>
                     <td><?= $page->name ?></td>
                     <td><?= date('m/d/Y h:i a', strtotime($game->start)) ?></td>
                     <td><?= $game->status ?></td>
@@ -61,23 +62,33 @@ function list_games($link_text, $link_href=null)
     }
     catch( Bozuko_Api_Exeption $e){
         // handle api error
-        ?>
-        <div class="alert alert-error">
-            <h4>An API error occured</h4>
-            <pre><?= htmlentities( print_r($e, 1)) ?></pre>
-        </div>
-        <?
+        alert_box(
+            'An API Error occurred',
+            '<pre>'.htmlentities( print_r($e, 1)).'</pre>',
+            'error',
+            true
+        );
     }
     catch( Exception $e ){
         // handle any other errors
-        ?>
-        <div class="alert alert-error">
-            <h4>An error occured</h4>
-            <pre><?= htmlentities( print_r($e, 1)) ?></pre>
-        </div>
-        <?
+        alert_box(
+            'An Error occurred',
+            '<pre>'.htmlentities( print_r($e, 1)).'</pre>',
+            'error',
+            true
+        );
     }
-    
+}
+
+function alert_box($title, $text, $type='error', $close=true)
+{
+    ?>
+    <div class="alert alert-<?= $type ?> alert-block">
+        <a class="close" data-dismiss="alert" href="#">&times;</a>
+        <? if( $title ) { ?><h4><?= $title ?></h4><? } ?>
+        <?= $text ?>
+    </div>
+    <?php
 }
 
 function intuit_types($ar)
@@ -89,10 +100,14 @@ function intuit_types($ar)
             $n[$k] = intuit_types( $v );
         }
         else if( is_string( $v ) ){
-            if( preg_match('/^true|false$/', $v ) ){
-                $n[$k] = (bool) $v;
+            if( preg_match('/^(true|false)$/', $v ) ){
+                $n[$k] = $v === 'true';
+                
             }
-            else if( preg_match('/^(\d+|\d?\.\d+)$/', $v) ) {
+            else if( preg_match('/^\d+$/', $v) ) {
+                $n[$k] = (int) $v;
+            }
+            else if( preg_match('/^\d*\.\d+$/', $v) ) {
                 $n[$k] = (float) $v;
             }
             else if( !$v ){

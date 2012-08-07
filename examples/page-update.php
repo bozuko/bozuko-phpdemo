@@ -13,11 +13,12 @@ try{
     
     $pages_result = $api->call('/pages');
     if( !$pages_result->count ){
-        ?>
-        <div class="alert alert-info">
-        <h4>There are no pages! Create one with the <strong>Create Page</strong> example.
-        </div>
-        <?php
+        alert_box(
+            'There are no pages',
+            '<p>Create one with the Create Page example</p>',
+            'info',
+            false
+        );
         require_once(dirname(__FILE__).'/inc/footer.php');
         exit;
     }
@@ -26,11 +27,12 @@ try{
     // current page?
     if( ($id = $_GET['id']) ){
         $page = $api->call('/page/'.$id);
-        
     }
     
     if( $_SERVER['REQUEST_METHOD'] == 'POST' ){
-        $result = $api->call('/page/', 'POST', intuit_types($_POST));
+        $post = intuit_types( $_POST );
+        if( @$post['facebook_id'] ) $post['facebook_id'] = (string) $post['facebook_id'];
+        $result = $api->call('/page/', 'POST', $post);
         if( !$result->success ){
             $errors = $result->errors;
             $error = $result->error;
@@ -41,12 +43,7 @@ try{
     }
     
     if( $result && $result->success ){
-        ?>
-        <div class="alert alert-block alert-success">
-            <h4>Page Updated</h4>
-            <p>The page was updated successfully.</p>
-        </div>
-        <?php
+        alert_box('Rad!', '<p>Page has been updated.</p>', 'success');
     }
     
     $fields = array(
@@ -101,7 +98,7 @@ try{
         
         if( ($v=@$ar[$n]) ) $fields[$i]['value'] = $v;
         if( $result && $result->errors && ($e = $result->errors->$n) ){
-            $field[$i]['error'] = $e;
+            $fields[$i]['error'] = $e;
         }
     }
     ?>
@@ -147,23 +144,24 @@ try{
     </form>
     <?php
     
-}catch(Bozuko_Api_Exception $e){
+}
+catch( Bozuko_Api_Exeption $e){
     // handle api error
-    ?>
-    <div class="alert alert-error">
-        <h4>An API error occured</h4>
-        <pre><?= htmlentities( print_r($e, 1)) ?></pre>
-    </div>
-    <?
-    
-}catch(Exception $e){
+    alert_box(
+        'An API Error occurred',
+        '<pre>'.htmlentities( print_r($e, 1)).'</pre>',
+        'error',
+        true
+    );
+}
+catch( Exception $e ){
     // handle any other errors
-    ?>
-    <div class="alert alert-error">
-        <h4>An error occured</h4>
-        <pre><?= htmlentities( print_r($e, 1)) ?></pre>
-    </div>
-    <?
+    alert_box(
+        'An Error occurred',
+        '<pre>'.htmlentities( print_r($e, 1)).'</pre>',
+        'error',
+        true
+    );
 }
 
 

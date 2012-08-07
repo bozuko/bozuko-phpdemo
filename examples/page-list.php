@@ -9,11 +9,12 @@ try{
     $pages = $api->call('/pages');
     
     if(!$pages->count){
-        ?>
-        <div class="alert alert-info">
-        <h4>There are no pages! Create one with the <strong>Create Page</strong> example.
-        </div>
-        <?
+        alert_box(
+            'There are no pages',
+            '<p>Create one with the Create Page example</p>',
+            'info',
+            false
+        );
     }
     else{
         ?>
@@ -26,23 +27,24 @@ try{
     }
     
     
-}catch(Bozuko_Api_Exception $e){
+}
+catch( Bozuko_Api_Exeption $e){
     // handle api error
-    ?>
-    <div class="alert alert-error">
-        <h4>An API error occured</h4>
-        <pre><?= htmlentities( print_r($e, 1)) ?></pre>
-    </div>
-    <?
-    
-}catch(Exception $e){
+    alert_box(
+        'An API Error occurred',
+        '<pre>'.htmlentities( print_r($e, 1)).'</pre>',
+        'error',
+        true
+    );
+}
+catch( Exception $e ){
     // handle any other errors
-    ?>
-    <div class="alert alert-error">
-        <h4>An error occured</h4>
-        <pre><?= htmlentities( print_r($e, 1)) ?></pre>
-    </div>
-    <?
+    alert_box(
+        'An Error occurred',
+        '<pre>'.htmlentities( print_r($e, 1)).'</pre>',
+        'error',
+        true
+    );
 }
 
 require_once(dirname(__FILE__).'/inc/footer.php');

@@ -82,9 +82,22 @@ $examples = array(
             <a href="https://playground.bozuko.com:8001/docs/api/#/links/game_cancel" target="bozuko_docs">game_cancel link</a>
             </p>
         '
+    ),
+    array(
+        'title'         => 'Theme Chooser',
+        'file'          => 'themechooser',
+        'description'   => '
+            <p>Display Reports</p>
+        '
+    ),
+    array(
+        'title'         => 'Reports',
+        'file'          => 'reports',
+        'description'   => '
+            <p>Display Reports</p>
+        '
     )
-)
-
+);
 ?>
 <div class="tabbable tabs-left">
     <ul class="nav nav-tabs">

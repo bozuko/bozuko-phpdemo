@@ -13,19 +13,20 @@ class Bozuko_Api_Request
     protected $apiKey;
     protected $apiSecret;
     protected $token;
+    protected $timeout=10;
     
     protected $response;
     
     public function __construct( $config = array() )
     {
-        foreach( array('path', 'method', 'params', 'token', 'apiKey', 'apiSecret', 'server', 'port') as $v ){
+        foreach( array('path', 'method', 'params', 'token', 'apiKey', 'apiSecret', 'server', 'port', 'timeout') as $v ){
             if( isset( $config[$v] ) ) $this->$v = $config[$v];
         }
     }
     
     public function __call($name, $arguments)
     {
-        foreach( array('path', 'method', 'params', 'token', 'apiKey', 'apiSecret', 'server', 'port') as $v ){
+        foreach( array('path', 'method', 'params', 'token', 'apiKey', 'apiSecret', 'server', 'port', 'timeout') as $v ){
             $setMethod = 'set'.ucfirst($v);
             if( method_exists( $this, $setMethod ) ){
                 call_user_func_array( array(&$this, $setMethod), $arguments );
@@ -87,9 +88,10 @@ class Bozuko_Api_Request
         curl_setopt_array( $ch, array(
             CURLOPT_URL             => $url,
             CURLOPT_CUSTOMREQUEST   => $this->method,
-            CURLOPT_RETURNTRANSFER  => true,
-            CURLOPT_TIMEOUT         => 10
+            CURLOPT_RETURNTRANSFER  => true
         ));
+        
+        if( $this->timeout ) curl_setopt($ch, CURLOPT_TIMEOUT, $this->timeout);
         
         if( $this->apiKey ) $headers[] = 'bozuko_api_key: '.$this->apiKey;
         if( $this->apiSecret ) $headers[] = 'bozuko_api_secret: '.$this->apiSecret;

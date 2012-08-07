@@ -10,7 +10,9 @@ try{
     $success = false;
     $result;
     if( $_SERVER['REQUEST_METHOD'] == 'POST' ){
-        $result = $api->call('/page', 'PUT', intuit_types($_POST) );
+        $post = intuit_types( $_POST );
+        if( @$post['facebook_id'] ) $post['facebook_id'] = (string) $post['facebook_id'];
+        $result = $api->call('/page', 'PUT', $post );
         if( !$result->success ){
             $errors = $result->errors;
             $error = $result->error;
@@ -21,12 +23,8 @@ try{
     }
     
     if( $result && $result->success ){
+        alert_box('Right on!', '<p>Page created. <a href="?">Do it again</a>.</p>', 'success', false);
         ?>
-        <div class="alert alert-block alert-success">
-            <h4>Page Created</h4>
-            <p>The page was created successfully - see the details below.</p>
-            <p><a href="?">Create another page</a></p>
-        </div>
         <pre><?= htmlentities( print_r( $result->page, 1 ) ) ?></pre>
         <?php
     }
@@ -84,6 +82,7 @@ try{
             }
             
             if( ($v=@$ar[$n]) ) $field['value'] = $v;
+            
             if( $result && $result->errors && ($e = $result->errors->$n) ){
                 $field['error'] = $e;
             }
@@ -121,23 +120,24 @@ try{
         <?php
     }
     
-}catch(Bozuko_Api_Exception $e){
+}
+catch( Bozuko_Api_Exeption $e){
     // handle api error
-    ?>
-    <div class="alert alert-error">
-        <h4>An API error occured</h4>
-        <pre><?= htmlentities( print_r($e, 1)) ?></pre>
-    </div>
-    <?
-    
-}catch(Exception $e){
+    alert_box(
+        'An API Error occurred',
+        '<pre>'.htmlentities( print_r($e, 1)).'</pre>',
+        'error',
+        true
+    );
+}
+catch( Exception $e ){
     // handle any other errors
-    ?>
-    <div class="alert alert-error">
-        <h4>An error occured</h4>
-        <pre><?= htmlentities( print_r($e, 1)) ?></pre>
-    </div>
-    <?
+    alert_box(
+        'An Error occurred',
+        '<pre>'.htmlentities( print_r($e, 1)).'</pre>',
+        'error',
+        true
+    );
 }
 
 
