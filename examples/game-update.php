@@ -97,6 +97,10 @@ try{
             'label'             => 'Theme'
         ),
         array(
+            'name'              => 'game_background',
+            'label'             => 'Game Background'
+        ),
+        array(
             'name'              => 'entry_duration',
             'label'             => 'Entry Duration',
             'type'              => 'select',

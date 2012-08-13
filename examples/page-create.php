@@ -44,6 +44,10 @@ try{
                 'label'             => 'Image URL'
             ),
             array(
+                'name'              => 'game_background',
+                'label'             => 'Game Background'
+            ),
+            array(
                 'name'              => 'location[street]',
                 'label'             => 'Street'
             ),
