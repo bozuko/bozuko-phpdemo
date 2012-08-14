@@ -165,6 +165,10 @@ try{
     
     $prize_fields = array(
         array(
+            'name'              => 'id',
+            'type'              => 'hidden'
+        ),
+        array(
             'name'              => 'name',
             'label'             => 'Name'
         ),

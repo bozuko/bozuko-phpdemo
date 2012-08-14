@@ -84,6 +84,26 @@ $examples = array(
         '
     ),
     array(
+        'title'         => 'Prize Codes',
+        'file'          => 'game-codes',
+        'description'   => '
+            <p>View all the prize codes for a game.</p>
+            <p>See the docs for the 
+            <a href="https://playground.bozuko.com:8001/docs/api/#/links/game_prize_codes" target="bozuko_docs">game_prize_codes link</a>
+            </p>
+        '
+    ),
+    array(
+        'title'         => 'Prize Wins',
+        'file'          => 'game-wins',
+        'description'   => '
+            <p>View all the prize wins for a game.</p>
+            <p>See the docs for the 
+            <a href="https://playground.bozuko.com:8001/docs/api/#/links/game_prize_wins" target="bozuko_docs">game_prize_wins link</a>
+            </p>
+        '
+    ),
+    array(
         'title'         => 'Theme Chooser',
         'file'          => 'themechooser',
         'description'   => '
