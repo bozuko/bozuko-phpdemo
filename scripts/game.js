@@ -44,7 +44,6 @@ jQuery(function($){
             $(this).attr('id', 'prize_'+i);
             updateTab( $(this), i );
         });
-        
     });
     
     $('[name=consolation_enabled]').change(function(){
@@ -52,6 +51,10 @@ jQuery(function($){
         $('.consolation-prize')[enabled==='true'?'removeClass':'addClass']('hide');
     });
     
+    $('[name=engine_type]').change(function(){
+        $('[name=win_frequency]').parents('.control-group')[$(this).val() == 'order' ? 'removeClass' : 'addClass']('hide');
+    });
+    $('[name=engine_type]').change();
     
     jQuery(function(){
         $('[name=theme]').bozukothemechooser({server:BOZUKO_SERVER, key:BOZUKO_KEY});

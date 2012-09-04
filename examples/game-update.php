@@ -149,6 +149,20 @@ try{
             'name'              => 'share_description',
             'label'             => 'Facebook Share Description',
             'type'              => 'textarea'
+        ),
+        array(
+            'name'              => 'engine_type',
+            'label'             => 'Contest Engine',
+            'type'              => 'select',
+            'options'           => array(
+                'time'              => 'Time Based',
+                'order'             => 'Odds Based'
+            )
+        ),
+        array(
+            'name'              => 'win_frequency',
+            'label'             => 'Win Frequency',
+            'type'              => 'text'
         )
     );
     
