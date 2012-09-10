@@ -69,6 +69,10 @@ try{
     
     $game_fields = array(
         array(
+            'name'              => 'page_id',
+            'type'              => 'hidden'
+        ),
+        array(
             'name'              => 'id',
             'type'              => 'hidden'
         ),

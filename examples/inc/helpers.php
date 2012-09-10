@@ -142,12 +142,18 @@ function renderFields($fields)
         <div class="controls">
             <select
                 class="span3"
-                name="<?= $field['name'] ?>"
+                name="<?= $field['name'] ?><? if( @$field['multiple'] ){ ?>[]<? } ?>"
                 id="<?= $field['name'] ?>"
+                <? if( @$field['multiple'] ){ ?>
+                multiple="multiple"
+                style="height: 100px"
+                <? } ?>
             >
             <?
             foreach((array) @$field['options'] as $value => $text ){
-                $selected = $field['value'] === $value; 
+                $selected = is_array($field['value']) ?
+                    in_array( $value, $field['value'] ) :
+                    $value === $field['value']; 
                 ?>
                 <option
                     <?= $selected ? 'selected' : '' ?>
@@ -195,6 +201,8 @@ function renderFields($fields)
             
             case 'text':
             case 'date':
+            case 'number':
+            case 'email':
             default:
                 $classes = array('span3');
                 if( $type == 'date' ) $classes[] = 'datetime';
@@ -202,7 +210,7 @@ function renderFields($fields)
         <div class="controls">
             <input
                 class="<?= implode(' ',$classes) ?>"
-                type="text"
+                type="<?= $type == 'date' || !$type? 'text' : $type ?>"
                 name="<?= $field['name'] ?>"
                 id="<?= $field['name'] ?>"
                 <? if( ($v=@$field['value']) ) { ?>

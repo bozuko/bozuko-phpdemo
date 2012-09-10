@@ -57,7 +57,11 @@ jQuery(function($){
     $('[name=engine_type]').change();
     
     jQuery(function(){
-        $('[name=theme]').bozukothemechooser({server:BOZUKO_SERVER, key:BOZUKO_KEY});
+        $('[name=theme]').bozukothemechooser({
+            server:BOZUKO_SERVER,
+            key:BOZUKO_KEY,
+            page: $('[name=page_id]').val()
+        });
     });
     
     function updateTab(tab, i, empty){

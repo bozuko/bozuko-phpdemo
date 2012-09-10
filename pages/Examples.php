@@ -38,6 +38,36 @@ $examples = array(
         '
     ),
     array(
+        'title'         => 'List Themes',
+        'file'          => 'theme-list',
+        'description'   => '
+            <p>Get a list of all themes.</p>
+            <p>See the docs for the 
+            <a href="https://playground.bozuko.com:8001/docs/api/#/links/themes" target="bozuko_docs">themes</a>
+            link.</p>
+        '
+    ),
+    array(
+        'title'         => 'Create Theme',
+        'file'          => 'theme-create',
+        'description'   => '
+            <p>Add a new themes.</p>
+            <p>See the docs for the 
+            <a href="https://playground.bozuko.com:8001/docs/api/#/links/theme" target="bozuko_docs">theme</a>
+            link.</p>
+        '
+    ),
+    array(
+        'title'         => 'Update Theme',
+        'file'          => 'theme-update',
+        'description'   => '
+            <p>Add a new themes.</p>
+            <p>See the docs for the 
+            <a href="https://playground.bozuko.com:8001/docs/api/#/links/theme" target="bozuko_docs">theme</a>
+            link.</p>
+        '
+    ),
+    array(
         'title'         => 'Create Game',
         'file'          => 'game-create',
         'description'   => '
